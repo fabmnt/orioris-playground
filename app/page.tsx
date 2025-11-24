@@ -21,17 +21,19 @@ export default function Home() {
 
   return (
     <div className='flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black'>
-      <header>
-        <h1 className='text-xl font-bold tracking-tight'>
-          Orioris{' '}
-          <Image
-            className='inline-block'
-            src='/oriorisai.svg'
-            alt='Orioris logo'
-            width={40}
-            height={40}
-          />
-        </h1>
+      <header className='bg-card border-b py-4 pb-4'>
+        <div className='mx-auto w-full max-w-4xl'>
+          <h1 className='text-lg font-bold tracking-tight'>
+            Orioris{' '}
+            <Image
+              className='inline-block'
+              src='/oriorisai.svg'
+              alt='Orioris logo'
+              width={24}
+              height={24}
+            />
+          </h1>
+        </div>
       </header>
       <main className='mx-auto w-full max-w-4xl space-y-6 py-4'>
         {step === 'upload' && (

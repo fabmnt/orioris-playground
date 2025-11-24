@@ -1,5 +1,5 @@
 import { config } from '@/app.config'
-import { Tool } from '@/app.types'
+import { ExtractionResult, Tool } from '@/app.types'
 
 interface ExtractParams {
   tool: Tool
@@ -38,7 +38,7 @@ export const extractionService = {
         throw new Error('Failed to extract data')
       }
 
-      return response.json()
+      return response.json() as Promise<ExtractionResult>
     },
   },
 }

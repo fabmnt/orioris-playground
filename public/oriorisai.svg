@@ -1,0 +1,32 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" width="1600" height="1600">
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(653.754,-653.754,653.754,653.754,163.975,335.699)">
+			<stop offset="0" stop-color="#1dbfd1"/>
+			<stop offset=".986" stop-color="#a71eb9" stop-opacity=".8"/>
+		</linearGradient>
+		<linearGradient id="g2" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-360.543,-360.543,360.544,-360.544,436.799,737.651)">
+			<stop offset="0" stop-color="#1dbfd1"/>
+			<stop offset=".634" stop-color="#a71eb9" stop-opacity=".8"/>
+		</linearGradient>
+		<linearGradient id="g3" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(352.551,352.551,-352.551,352.551,1174.79,860.402)">
+			<stop offset="0" stop-color="#1dbfd1"/>
+			<stop offset=".657" stop-color="#4920e3" stop-opacity=".8"/>
+		</linearGradient>
+		<linearGradient id="g4" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-861.378,861.378,-861.379,-861.379,1541.068,1149.044)">
+			<stop offset="0" stop-color="#1dbfd1"/>
+			<stop offset=".761" stop-color="#4920e3" stop-opacity=".81"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1) } 
+		.s1 { fill: url(#g2) } 
+		.s2 { fill: url(#g3) } 
+		.s3 { fill: url(#g4) } 
+	</style>
+	<g id="Layer 1">
+		<path id="&lt;Path&gt;" class="s0" d="m1339.5 144.76l-737.07 737.07c-14.95 14.95-39.19 14.95-54.14 0l-58.41-58.41c-14.95-14.95-14.95-39.19 0-54.14l737.07-737.07c14.95-14.95 39.19-14.95 54.14 0l58.41 58.41c14.95 14.95 14.95 39.19 0 54.14z"/>
+		<path id="&lt;Path&gt;" class="s1" d="m493.31 546.17l-225.58-225.58c-14.95-14.95-14.95-39.19 0-54.14l58.41-58.41c14.95-14.95 39.19-14.95 54.14 0l225.59 225.58c14.95 14.95 14.95 39.19 0 54.14l-58.42 58.41c-14.95 14.95-39.19 14.95-54.14 0z"/>
+		<path id="&lt;Path&gt;" class="s2" d="m1227.31 1378.02l-217.59-217.59c-14.95-14.95-14.95-39.19 0-54.14l58.41-58.41c14.95-14.95 39.19-14.95 54.14 0l217.59 217.59c14.95 14.95 14.95 39.19 0 54.14l-58.41 58.41c-14.95 14.95-39.19 14.95-54.14 0z"/>
+		<path id="&lt;Path&gt;" class="s3" d="m1099.17 842.11l-726.41 726.42c-14.95 14.95-39.19 14.95-54.14 0l-58.41-58.41c-14.95-14.95-14.95-39.19 0-54.14l726.41-726.42c14.95-14.95 39.19-14.95 54.14 0l58.41 58.41c14.95 14.95 14.95 39.19 0 54.14z"/>
+	</g>
+</svg>

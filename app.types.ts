@@ -1,1 +1,1 @@
-export type Tool = "spacy" | "plumber" | "docling"
+export type Tool = 'spacy' | 'plumber' | 'docling'

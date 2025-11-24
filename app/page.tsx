@@ -1,6 +1,7 @@
 'use client'
 
 import { PDFResults } from '@/components/pdf-results'
+import { DarkModeToggle } from '@/components/toggle-dark-mode'
 import { Button } from '@/components/ui/button'
 import { UploadPDF } from '@/components/upload-pdf'
 import Image from 'next/image'
@@ -22,17 +23,22 @@ export default function Home() {
   return (
     <div className='flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black'>
       <header className='bg-card border-b py-4 pb-4'>
-        <div className='mx-auto w-full max-w-4xl'>
-          <h1 className='text-lg font-bold tracking-tight'>
-            Orioris{' '}
-            <Image
-              className='inline-block'
-              src='/oriorisai.svg'
-              alt='Orioris logo'
-              width={24}
-              height={24}
-            />
-          </h1>
+        <div className='mx-auto flex w-full max-w-4xl items-center justify-between'>
+          <div>
+            <h1 className='text-lg font-bold tracking-tight'>
+              Orioris{' '}
+              <Image
+                className='inline-block'
+                src='/oriorisai.svg'
+                alt='Orioris logo'
+                width={24}
+                height={24}
+              />
+            </h1>
+          </div>
+          <div>
+            <DarkModeToggle />
+          </div>
         </div>
       </header>
       <main className='mx-auto w-full max-w-4xl space-y-6 py-4'>

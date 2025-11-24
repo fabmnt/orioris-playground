@@ -2,7 +2,7 @@ import { Tool } from './app.types'
 
 const ENDPOINTS = {
   extraction: ({ tool, processOutput }: { tool: Tool; processOutput: boolean }) =>
-    new URL(`${config.API_URL}/${tool}/${processOutput ? 'process-output' : ''}`),
+    new URL(`${config.API_URL}/${tool}/${processOutput}`),
 }
 
 const API_URL = 'https://orioris.controlcentralcarrier.com/api/v1'

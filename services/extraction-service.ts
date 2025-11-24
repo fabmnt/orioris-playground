@@ -17,7 +17,7 @@ export const extractionService = {
   query: {
     async extract({ tool, processOutput, pdf, options }: ExtractParams) {
       const formData = new FormData()
-      formData.append('pdf', pdf)
+      formData.append('file', pdf)
       formData.append('tables', options.tables ? 'true' : 'false')
       formData.append('text', options.text ? 'true' : 'false')
 
@@ -29,9 +29,6 @@ export const extractionService = {
         {
           method: 'POST',
           body: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
         },
       )
 

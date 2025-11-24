@@ -54,7 +54,7 @@ export default function Home() {
             </Button>
           </div>
         )}
-        {step === 'results' && <PDFResults />}
+        {step === 'results' && file && <PDFResults file={file} />}
       </main>
     </div>
   )

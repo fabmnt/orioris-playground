@@ -6,6 +6,7 @@ interface ExtractParams {
   processOutput?: boolean
   pdf: File
   options: ExtractionOptions
+  signal?: AbortSignal
 }
 
 interface ExtractionOptions {
@@ -15,7 +16,7 @@ interface ExtractionOptions {
 
 export const extractionService = {
   query: {
-    async extract({ tool, processOutput, pdf, options }: ExtractParams) {
+    async extract({ tool, processOutput, pdf, options, signal }: ExtractParams) {
       const formData = new FormData()
       formData.append('file', pdf)
       formData.append('tables', options.tables ? 'true' : 'false')
@@ -29,6 +30,7 @@ export const extractionService = {
         {
           method: 'POST',
           body: formData,
+          signal,
         },
       )
 

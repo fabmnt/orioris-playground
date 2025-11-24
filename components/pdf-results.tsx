@@ -3,14 +3,29 @@
 import { Tool } from '@/app.types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { extractionService } from '@/services/extraction-service'
 import { useMutation } from '@tanstack/react-query'
-import { Check, ChevronRight, Loader2 } from 'lucide-react'
+import { ChevronRight, Loader2, MoreVertical, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+
+const MAX_EXTRACTIONS = 5
 
 interface PDFResultsProps {
   file: File
+}
+
+interface Extraction {
+  id: string
+  tool: Tool
+  status: 'pending' | 'success' | 'error'
+  data?: any
+  error?: string
+  timestamp: number
+  abortController?: AbortController
 }
 
 export function PDFResults({ file }: PDFResultsProps) {
@@ -18,25 +33,67 @@ export function PDFResults({ file }: PDFResultsProps) {
   const [processOutput, setProcessOutput] = useState(true)
   const [tables, setTables] = useState(true)
   const [text, setText] = useState(true)
+  const [extractions, setExtractions] = useState<Extraction[]>([])
+  const [activeTab, setActiveTab] = useState<string>('')
 
-  const {
-    mutate: extract,
-    data,
-    isPending,
-    error,
-  } = useMutation({
+  const { mutateAsync: extract } = useMutation({
     mutationFn: extractionService.query.extract,
   })
 
-  const handleSubmit = () => {
-    extract({
+  const handleSubmit = async () => {
+    if (extractions.length >= MAX_EXTRACTIONS) {
+      return
+    }
+
+    const id = Math.random().toString(36).substring(7)
+    const abortController = new AbortController()
+    const newExtraction: Extraction = {
+      id,
       tool,
-      processOutput,
-      pdf: file,
-      options: {
-        tables,
-        text,
-      },
+      status: 'pending',
+      timestamp: Date.now(),
+      abortController,
+    }
+
+    setExtractions((prev) => [...prev, newExtraction])
+    setActiveTab(id)
+
+    try {
+      const result = await extract({
+        tool,
+        processOutput,
+        pdf: file,
+        options: {
+          tables,
+          text,
+        },
+        signal: abortController.signal,
+      })
+      setExtractions((prev) => prev.map((e) => (e.id === id ? { ...e, status: 'success', data: result } : e)))
+    } catch (err: any) {
+      // Don't update state if the request was aborted
+      if (err.name === 'AbortError') {
+        return
+      }
+      setExtractions((prev) => prev.map((e) => (e.id === id ? { ...e, status: 'error', error: err.message } : e)))
+    }
+  }
+
+  const handleDelete = (id: string) => {
+    setExtractions((prev) => {
+      const extraction = prev.find((e) => e.id === id)
+
+      // If the extraction is still pending, abort the request
+      if (extraction?.status === 'pending' && extraction.abortController) {
+        extraction.abortController.abort()
+      }
+
+      const filtered = prev.filter((e) => e.id !== id)
+      // If we deleted the active tab, switch to the first available one
+      if (activeTab === id && filtered.length > 0) {
+        setActiveTab(filtered[0].id)
+      }
+      return filtered
     })
   }
 
@@ -61,7 +118,6 @@ export function PDFResults({ file }: PDFResultsProps) {
                         : 'border-input hover:bg-accent hover:text-accent-foreground'
                     }`}
                   >
-                    {tool === t && <Check className='h-4 w-4' />}
                     {t.charAt(0).toUpperCase() + t.slice(1)}
                   </button>
                 ))}
@@ -72,12 +128,10 @@ export function PDFResults({ file }: PDFResultsProps) {
               <Label>Options</Label>
               <div className='flex flex-col gap-4'>
                 <div className='flex items-center space-x-2'>
-                  <input
-                    type='checkbox'
+                  <Switch
                     id='processOutput'
-                    className='text-primary focus:ring-primary h-4 w-4 rounded border-gray-300'
                     checked={processOutput}
-                    onChange={(e) => setProcessOutput(e.target.checked)}
+                    onCheckedChange={setProcessOutput}
                   />
                   <Label
                     htmlFor='processOutput'
@@ -88,12 +142,10 @@ export function PDFResults({ file }: PDFResultsProps) {
                 </div>
 
                 <div className='flex items-center space-x-2'>
-                  <input
-                    type='checkbox'
+                  <Switch
                     id='tables'
-                    className='text-primary focus:ring-primary h-4 w-4 rounded border-gray-300'
                     checked={tables}
-                    onChange={(e) => setTables(e.target.checked)}
+                    onCheckedChange={setTables}
                   />
                   <Label
                     htmlFor='tables'
@@ -104,12 +156,10 @@ export function PDFResults({ file }: PDFResultsProps) {
                 </div>
 
                 <div className='flex items-center space-x-2'>
-                  <input
-                    type='checkbox'
+                  <Switch
                     id='text'
-                    className='text-primary focus:ring-primary h-4 w-4 rounded border-gray-300'
                     checked={text}
-                    onChange={(e) => setText(e.target.checked)}
+                    onCheckedChange={setText}
                   />
                   <Label
                     htmlFor='text'
@@ -124,21 +174,14 @@ export function PDFResults({ file }: PDFResultsProps) {
             <div className='pt-4'>
               <Button
                 onClick={handleSubmit}
-                disabled={isPending}
                 className='w-full'
                 size='lg'
+                disabled={extractions.length >= MAX_EXTRACTIONS}
               >
-                {isPending ? (
-                  <>
-                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                    Extracting...
-                  </>
-                ) : (
-                  <>
-                    Run Extraction
-                    <ChevronRight className='ml-2 h-4 w-4' />
-                  </>
-                )}
+                {extractions.length >= MAX_EXTRACTIONS
+                  ? `Maximum ${MAX_EXTRACTIONS} extractions reached`
+                  : 'Run Extraction'}
+                {extractions.length < MAX_EXTRACTIONS && <ChevronRight className='ml-2 h-4 w-4' />}
               </Button>
             </div>
           </CardContent>
@@ -168,29 +211,98 @@ export function PDFResults({ file }: PDFResultsProps) {
       </div>
 
       <div className='h-full min-h-[500px]'>
-        <Card className='flex h-full flex-col'>
-          <CardHeader>
-            <CardTitle>Results</CardTitle>
-          </CardHeader>
-          <CardContent className='flex-1'>
-            {error ? (
-              <div className='bg-destructive/10 text-destructive rounded-md p-4'>
-                <p className='font-medium'>Error extracting data</p>
-                <p className='text-sm'>{error.message}</p>
-              </div>
-            ) : data ? (
-              <div className='relative h-full'>
-                <pre className='bg-muted h-full max-h-[600px] overflow-auto rounded-md p-4 font-mono text-xs'>
-                  {JSON.stringify(data, null, 2)}
-                </pre>
-              </div>
-            ) : (
+        {extractions.length === 0 ? (
+          <Card className='flex h-full flex-col'>
+            <CardHeader>
+              <CardTitle>Results</CardTitle>
+            </CardHeader>
+            <CardContent className='flex-1'>
               <div className='text-muted-foreground flex h-full items-center justify-center'>
                 <p>Run extraction to see results</p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ) : (
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className='flex h-full flex-col'
+          >
+            <TabsList className='max-w-full justify-start overflow-x-auto'>
+              {extractions.map((extraction, index) => (
+                <TabsTrigger
+                  key={extraction.id}
+                  value={extraction.id}
+                >
+                  {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
+                  <span className='ml-2 text-xs opacity-50'>#{extraction.id.substring(0, 3)}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {extractions.map((extraction) => (
+              <TabsContent
+                key={extraction.id}
+                value={extraction.id}
+                className='flex-1'
+              >
+                <Card className='flex h-full flex-col'>
+                  <CardHeader>
+                    <CardTitle className='flex items-center justify-between'>
+                      <span>Results</span>
+                      <div className='flex items-center gap-2'>
+                        {extraction.status === 'pending' && (
+                          <span className='text-muted-foreground flex items-center text-sm font-normal'>
+                            <Loader2 className='mr-2 h-3 w-3 animate-spin' />
+                            Extracting...
+                          </span>
+                        )}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant='ghost'
+                              size='sm'
+                              className='h-8 w-8 p-0'
+                            >
+                              <MoreVertical className='h-4 w-4' />
+                              <span className='sr-only'>Open menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align='end'>
+                            <DropdownMenuItem
+                              variant='destructive'
+                              onClick={() => handleDelete(extraction.id)}
+                            >
+                              <Trash2 className='mr-2 h-4 w-4' />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className='flex-1'>
+                    {extraction.status === 'error' ? (
+                      <div className='bg-destructive/10 text-destructive rounded-md p-4'>
+                        <p className='font-medium'>Error extracting data</p>
+                        <p className='text-sm'>{extraction.error}</p>
+                      </div>
+                    ) : extraction.status === 'success' ? (
+                      <div className='relative h-full'>
+                        <pre className='bg-muted h-full max-h-[600px] overflow-auto rounded-md p-4 font-mono text-xs'>
+                          {JSON.stringify(extraction.data, null, 2)}
+                        </pre>
+                      </div>
+                    ) : (
+                      <div className='text-muted-foreground flex h-full items-center justify-center'>
+                        <Loader2 className='h-8 w-8 animate-spin' />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            ))}
+          </Tabs>
+        )}
       </div>
     </div>
   )

@@ -6,6 +6,6 @@ export interface Table {
 }
 
 export interface ExtractionResult {
-  tables?: Record<string, Table>
+  tables?: [Record<string, Table>]
   text?: string[]
 }

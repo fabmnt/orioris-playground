@@ -20,6 +20,10 @@ export default function Home() {
     setFile(null)
   }
 
+  const handleReset = () => {
+    setStep('upload')
+  }
+
   return (
     <div className='flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black'>
       <header className='bg-card border-b py-4 pb-4'>
@@ -62,7 +66,12 @@ export default function Home() {
             </Button>
           </div>
         )}
-        {step === 'results' && file && <PDFResults file={file} />}
+        {step === 'results' && file && (
+          <PDFResults
+            file={file}
+            onReset={handleReset}
+          />
+        )}
       </main>
     </div>
   )

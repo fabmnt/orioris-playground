@@ -11,13 +11,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { extractionService } from '@/services/extraction-service'
 import { useMutation } from '@tanstack/react-query'
-import { ChevronRight, Info, Loader2, Maximize2, Minimize2, MoreVertical, Trash2 } from 'lucide-react'
+import { ChevronRight, Info, Loader2, Maximize2, Minimize2, MoreVertical, Trash2, Upload } from 'lucide-react'
 import { useState } from 'react'
 
 const MAX_EXTRACTIONS = 5
 
 interface PDFResultsProps {
   file: File
+  onReset?: () => void
 }
 
 interface ExtractionConfig {
@@ -157,7 +158,7 @@ function FormattedResults({ data }: { data: ExtractionResult }) {
   )
 }
 
-export function PDFResults({ file }: PDFResultsProps) {
+export function PDFResults({ file, onReset }: PDFResultsProps) {
   const [tool, setTool] = useState<Tool>('spacy')
   const [processOutput, setProcessOutput] = useState(true)
   const [tables, setTables] = useState(true)
@@ -338,7 +339,7 @@ export function PDFResults({ file }: PDFResultsProps) {
               <CardHeader>
                 <CardTitle>File Details</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className='space-y-4'>
                 <dl className='grid grid-cols-2 gap-4 text-sm'>
                   <div>
                     <dt className='text-muted-foreground font-medium'>Name</dt>
@@ -353,6 +354,16 @@ export function PDFResults({ file }: PDFResultsProps) {
                     <dd>{file.type}</dd>
                   </div>
                 </dl>
+                {onReset && (
+                  <Button
+                    variant='outline'
+                    className='w-full'
+                    onClick={onReset}
+                  >
+                    <Upload className='mr-2 h-4 w-4' />
+                    Choose New File
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>

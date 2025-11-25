@@ -486,7 +486,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                           )}
                         </div>
                       ) : (
-                        <div className='text-muted-foreground flex h-full min-h-[300px] items-center justify-center'>
+                        <div className='text-muted-foreground flex h-full min-h-[500px] items-center justify-center'>
                           <Loader2 className='h-8 w-8 animate-spin' />
                         </div>
                       )}

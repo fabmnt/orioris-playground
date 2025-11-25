@@ -401,7 +401,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                     ) : (
                       <>
                         {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
-                        <span className='ml-2 text-xs'>#{extraction.id.substring(0, 3)}</span>
+                        <span className='text-muted-foreground ml-2 text-xs'>#{extraction.id.substring(0, 3)}</span>
                       </>
                     )}
                   </TabsTrigger>

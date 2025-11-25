@@ -387,14 +387,14 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
               onValueChange={setActiveTab}
               className='flex h-full flex-col'
             >
-              <TabsList className='max-w-full justify-start overflow-x-auto'>
+              <TabsList className='max-w-full justify-start overflow-x-auto border'>
                 {extractions.map((extraction, index) => (
                   <TabsTrigger
                     key={extraction.id}
                     value={extraction.id}
                   >
                     {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
-                    <span className='ml-2 text-xs opacity-50'>#{extraction.id.substring(0, 3)}</span>
+                    <span className='ml-2 text-xs'>#{extraction.id.substring(0, 3)}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>

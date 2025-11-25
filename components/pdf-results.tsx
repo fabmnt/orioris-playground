@@ -278,8 +278,8 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                     <div className='flex items-center space-x-2'>
                       <Switch
                         id='processOutput'
-                        checked={processOutput}
-                        onCheckedChange={setProcessOutput}
+                        defaultChecked
+                        disabled
                       />
                       <Label
                         htmlFor='processOutput'

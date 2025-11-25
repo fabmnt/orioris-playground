@@ -11,8 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { extractionService } from '@/services/extraction-service'
 import { useMutation } from '@tanstack/react-query'
-import { ChevronRight, Info, Loader2, Maximize2, Minimize2, MoreVertical, Trash2, Upload } from 'lucide-react'
+import { ChevronRight, Info, Maximize2, Minimize2, MoreVertical, Trash2, Upload } from 'lucide-react'
 import { useState } from 'react'
+import { Shimmer } from './ai-elements/shimmer'
 
 const MAX_EXTRACTIONS = 5
 
@@ -426,8 +427,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                           )}
                           {extraction.status === 'pending' && (
                             <span className='text-muted-foreground flex items-center text-sm font-normal'>
-                              <Loader2 className='mr-2 h-3 w-3 animate-spin' />
-                              Extracting...
+                              <Shimmer duration={1}>Extracting...</Shimmer>
                             </span>
                           )}
                           <Button
@@ -487,7 +487,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                         </div>
                       ) : (
                         <div className='text-muted-foreground flex h-full min-h-[500px] items-center justify-center'>
-                          <Loader2 className='h-8 w-8 animate-spin' />
+                          <Shimmer duration={1}>Extracting...</Shimmer>
                         </div>
                       )}
                     </CardContent>

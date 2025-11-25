@@ -369,7 +369,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
           </div>
         )}
 
-        <div className={`h-full ${isExpanded ? 'min-h-[800px]' : 'min-h-[500px]'}`}>
+        <div className={`h-full ${isExpanded ? 'h-[800px]' : 'h-[500px]'}`}>
           {extractions.length === 0 ? (
             <Card className='flex h-full flex-col'>
               <CardHeader>
@@ -402,9 +402,9 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                 <TabsContent
                   key={extraction.id}
                   value={extraction.id}
-                  className='flex-1'
+                  className='h-full flex-1'
                 >
-                  <Card className='flex h-full flex-col'>
+                  <Card className='flex h-full w-full flex-col'>
                     <CardHeader>
                       <CardTitle className='flex items-center justify-between'>
                         <span>Results</span>
@@ -467,7 +467,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                         </div>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className='flex-1'>
+                    <CardContent className='w-full flex-1'>
                       {extraction.status === 'error' ? (
                         <div className='bg-destructive/10 text-destructive rounded-md p-4'>
                           <p className='font-medium'>Error extracting data</p>
@@ -486,7 +486,7 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                           )}
                         </div>
                       ) : (
-                        <div className='text-muted-foreground flex h-full items-center justify-center'>
+                        <div className='text-muted-foreground flex h-full min-h-[300px] items-center justify-center'>
                           <Loader2 className='h-8 w-8 animate-spin' />
                         </div>
                       )}

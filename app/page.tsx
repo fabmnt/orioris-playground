@@ -47,7 +47,19 @@ export default function Home() {
       </header>
       <main className='mx-auto w-full max-w-4xl space-y-6 py-4 xl:max-w-6xl'>
         {step === 'upload' && (
-          <div>
+          <div className='flex flex-col gap-y-4'>
+            <div>
+              <h2 className='text-center text-5xl font-bold tracking-tight'>
+                Welcome to Orioris{' '}
+                <Image
+                  src='/oriorisai.svg'
+                  className='inline-block'
+                  alt='Orioris logo'
+                  width={80}
+                  height={80}
+                />
+              </h2>
+            </div>
             <UploadPDF
               file={file}
               onFileSelect={handleFileSelect}

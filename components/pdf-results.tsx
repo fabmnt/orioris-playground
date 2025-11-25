@@ -394,8 +394,16 @@ export function PDFResults({ file, onReset }: PDFResultsProps) {
                     key={extraction.id}
                     value={extraction.id}
                   >
-                    {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
-                    <span className='ml-2 text-xs'>#{extraction.id.substring(0, 3)}</span>
+                    {extraction.status === 'pending' ? (
+                      <Shimmer duration={1}>
+                        {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
+                      </Shimmer>
+                    ) : (
+                      <>
+                        {extraction.tool.charAt(0).toUpperCase() + extraction.tool.slice(1)}
+                        <span className='ml-2 text-xs'>#{extraction.id.substring(0, 3)}</span>
+                      </>
+                    )}
                   </TabsTrigger>
                 ))}
               </TabsList>

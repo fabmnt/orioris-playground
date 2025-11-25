@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <div className='flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black'>
       <header className='bg-card border-b py-4 pb-4'>
-        <div className='mx-auto flex w-full max-w-4xl items-center justify-between'>
+        <div className='mx-auto flex w-full max-w-4xl items-center justify-between xl:max-w-6xl'>
           <div>
             <h1 className='text-lg font-bold tracking-tight'>
               Orioris{' '}
@@ -41,7 +41,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main className='mx-auto w-full max-w-4xl space-y-6 py-4'>
+      <main className='mx-auto w-full max-w-4xl space-y-6 py-4 xl:max-w-6xl'>
         {step === 'upload' && (
           <div>
             <UploadPDF
